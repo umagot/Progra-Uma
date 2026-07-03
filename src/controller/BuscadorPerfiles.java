@@ -7,16 +7,6 @@ import model.Usuario;
 
 public class BuscadorPerfiles {
 
-    /**
-     * Busca usuarios según los filtros proporcionados.
-     * Los filtros son opcionales (null = sin filtro en ese campo).
-     * 
-     * @param usuarios Array de todos los usuarios
-     * @param nombreEspecialidad Nombre de especialidad a buscar (null para ignorar)
-     * @param nombreSubespecialidad Nombre de subespecialidad a buscar (null para ignorar)
-     * @param nombreHabilidad Nombre de habilidad a buscar (null para ignorar)
-     * @return Array de usuarios que coinciden con los criterios
-     */
     public static Usuario[] buscarPorFiltros(
             Usuario[] usuarios,
             String nombreEspecialidad,
