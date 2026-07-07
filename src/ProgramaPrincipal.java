@@ -233,7 +233,6 @@ public class ProgramaPrincipal {
 
                         System.out.println("\n✅ Has leído todas tus notificaciones. Tu bandeja ahora está vacia.");
                     }
-                    System.out.println("=======================================");
                     break;
 
                 case 0:

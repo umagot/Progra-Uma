@@ -72,9 +72,13 @@ public class GestorPostulaciones {
             if (decision == 1) {
                 colaDeEspera.desencolar();
                 System.out.println("✅ Postulación ACEPTADA. El candidato fue procesado.");
+                String mensaje_si = "[Postulación] ¡Felicidades! Has sido ACEPTADO para el puesto de" + proxima.getPuesto().getNombrePuesto() + " en " + proxima.getPuesto().getEmpresa() + ".";
+                candidato.recibirNotificacion(mensaje_si);
             } else if (decision == 2) {
                 colaDeEspera.desencolar();
                 System.out.println("❌ Postulación RECHAZADA. El candidato fue procesado.");
+                String mensaje_no = "[Postulación] Lamentamos informarte que tu postulación para " + proxima.getPuesto().getNombrePuesto() + " en " + proxima.getPuesto().getEmpresa() + " ha sido RECHAZADA.";
+                candidato.recibirNotificacion(mensaje_no);
             } else {
                 System.out.println("⚠️ Operación cancelada. La postulación sigue esperando en la fila.");
             }
