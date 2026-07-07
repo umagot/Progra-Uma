@@ -60,7 +60,11 @@ public class GrafoMatrizAdyacencia implements IGrafo {
         matriz[posOrigen][posDestino] = 1;
         if (!dirigido) {
             matriz[posDestino][posOrigen] = 1;
+            vertices[posOrigen].recibirNotificacion("Ahora eres amigo de @" + vertices[posDestino].getNombre() + ".");
         }
+
+
+
     }
 
     @Override

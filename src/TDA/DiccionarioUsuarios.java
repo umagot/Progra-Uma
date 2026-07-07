@@ -66,7 +66,7 @@ public class DiccionarioUsuarios {
         // Recorremos la lista en ese índice (si hay colisión, serán unos pocos saltos)
         while (actual != null) {
             if (actual.usuario.getId() == id) {
-                return actual.usuario; // ¡Usuario encontrado!
+                return actual.usuario;
             }
             actual = actual.siguiente;
         }
@@ -102,14 +102,7 @@ public class DiccionarioUsuarios {
         return cantidadElementos;
     }
 
-    /**
-     * Obtiene todos los usuarios en la plataforma.
-     * Útil para realizar búsquedas complejas sin filtro de ID.
-     * <p>
-     * Complejidad: O(n) donde n es la cantidad de elementos
-     *
-     * @return Array de todos los usuarios registrados
-     */
+
     public Usuario[] obtenerTodos() {
         if (cantidadElementos == 0) {
             return new Usuario[0]; // Retornamos un arreglo vacío si no hay usuarios

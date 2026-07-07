@@ -1,23 +1,26 @@
 package model;
-
+import TDA.Cola;
 public class Usuario implements Comparable<Usuario> {
 
     private int id;
     private String nombre;
     private String mail;
     private Perfil perfil; // Un único perfil
+    private Cola<String> notificaciones;
 
-    // Constructor completo
+
     public Usuario(String nombre, int id, String mail, Perfil perfil) {
         this.nombre = nombre;
         this.id = id;
         this.mail = mail;
+        this.notificaciones = new Cola<String>(100);
 
         if (perfil != null) {
             this.perfil = new Perfil(perfil); // Constructor copia
         } else {
             this.perfil = null;
         }
+
     }
 
     // Constructor copia para guardar el historial en la pila
@@ -39,6 +42,7 @@ public class Usuario implements Comparable<Usuario> {
         this.id = id;
         this.mail = mail;
         this.perfil = null;
+        this.notificaciones = new Cola<String>(100);
     }
 
     // Getters
@@ -52,6 +56,10 @@ public class Usuario implements Comparable<Usuario> {
 
     public String getMail() {
         return mail;
+    }
+
+    public Cola<String> getNotificaciones() {
+        return this.notificaciones;
     }
 
     public Perfil getPerfil() {
@@ -109,4 +117,33 @@ public class Usuario implements Comparable<Usuario> {
 
         return "@" + nombre + " (ID: " + id + ") | Mail: " + mail + " | Perfil: " + textoPerfil;
     }
+
+
+    public void recibirNotificacion(String mensaje) {
+        if (this.notificaciones != null) {
+            if (!this.notificaciones.estaLlena()) {
+                this.notificaciones.encolar(mensaje);
+            } else {
+                this.notificaciones.desencolar();
+                this.notificaciones.encolar(mensaje);
+            }
+        }
+    }
+
+
+    public void leerNotificaciones() {
+        System.out.println("\n--- Bandeja de Entrada de @" + this.nombre + " ---");
+        if (this.notificaciones == null || this.notificaciones.estaVacia()) {
+            System.out.println("No tienes notificaciones nuevas.");
+            return;
+        }
+
+        int contador = 1;
+        while (!this.notificaciones.estaVacia()) {
+            String noti = this.notificaciones.desencolar();
+            System.out.println(contador + ". " + noti);
+            contador++;
+        }
+    }
+
 }

@@ -41,9 +41,10 @@ public class ProgramaPrincipal {
             System.out.println("7. Ver recomendaciones y red de un usuario");
             System.out.println("8. Gestion de postulaciones");
             System.out.println("9. Buscar usuarios por perfil");
+            System.out.println("10. Ver notificaciones");
             System.out.println("0. Salir");
 
-            opcion = SelectorPerfil.leerEnteroEnRango(scanner, "\nSeleccione una opcion: ", 0, 9);
+            opcion = SelectorPerfil.leerEnteroEnRango(scanner, "\nSeleccione una opcion: ", 0, 10);
 
             switch (opcion) {
                 case 1:
@@ -203,7 +204,38 @@ public class ProgramaPrincipal {
                     // NUEVA OPCIÓN: Búsqueda de usuarios por perfil
                     BuscadorPerfilesUI.menuBuscar(scanner, plataforma, catalogoGeneral);
                     break;
-                    
+
+                case 10:
+                    System.out.println("\n=======================================");
+                    System.out.println("       BANDEJA DE NOTIFICACIONES       ");
+                    System.out.println("=======================================");
+
+                    int idUsuario = SelectorPerfil.leerEntero(scanner, "Ingrese el ID del usuario: ");
+                    Usuario usuarioActual = plataforma.buscar(idUsuario);
+
+                    if (usuarioActual == null) {
+                        System.out.println("❌ Error: El usuario con ID " + idUsuario + " no existe en la plataforma.");
+                        System.out.println("=======================================");
+                        break;
+                    }
+
+                    System.out.println("\nConectado como: @" + usuarioActual.getNombre());
+                    if (usuarioActual.getNotificaciones() == null || usuarioActual.getNotificaciones().estaVacia()) {
+                        System.out.println("🔔 No tienes notificaciones nuevas por leer.");
+                    } else {
+                        System.out.println("Notificaciones: \n");
+                        int contador = 1;
+                        while (!usuarioActual.getNotificaciones().estaVacia()) {
+                            String notificacion = usuarioActual.getNotificaciones().desencolar();
+                            System.out.println(" [" + contador + "] " + notificacion);
+                            contador++;
+                        }
+
+                        System.out.println("\n✅ Has leído todas tus notificaciones. Tu bandeja ahora está vacia.");
+                    }
+                    System.out.println("=======================================");
+                    break;
+
                 case 0:
                     System.out.println("\nSaliendo del sistema... ¡Hasta luego!");
                     break;
