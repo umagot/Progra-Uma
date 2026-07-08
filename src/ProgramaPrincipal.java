@@ -202,14 +202,11 @@ public class ProgramaPrincipal {
                     break;
                     
                 case 9:
-                    // NUEVA OPCIÓN: Búsqueda de usuarios por perfil
                     BuscadorPerfilesUI.menuBuscar(scanner, plataforma, catalogoGeneral);
                     break;
 
                 case 10:
-                    System.out.println("\n=======================================");
-                    System.out.println("       BANDEJA DE NOTIFICACIONES       ");
-                    System.out.println("=======================================");
+                    System.out.println("---BANDEJA DE NOTIFICACIONES---");
 
                     int idUsuario = SelectorPerfil.leerEntero(scanner, "Ingrese el ID del usuario: ");
                     Usuario usuarioActual = plataforma.buscar(idUsuario);
@@ -238,6 +235,28 @@ public class ProgramaPrincipal {
                     }
                 break;
 
+                case 11:
+                    System.out.println("---ELIMINAR AMISTAD---");
+                    int idOrigen = SelectorPerfil.leerEntero(scanner, "Ingrese su ID de usuario: ");
+                    Usuario usuarioOrigen = plataforma.buscar(idOrigen);
+                    int idDestino = SelectorPerfil.leerEntero(scanner, "Ingrese el ID del amigo a eliminar: ");
+                    Usuario usuarioDestino = plataforma.buscar(idDestino);
+
+                    if (usuarioOrigen == null || usuarioDestino == null) {
+                        System.out.println("❌ Error: Uno o ambos usuarios no existen.");
+                        break;
+                    }
+
+                    if (!redSocial.existeArista(usuarioOrigen, usuarioDestino)) {
+                        System.out.println("⚠️ Estos usuarios no son amigos");
+                        break;
+                    }
+
+                    redSocial.eliminarArista(usuarioOrigen, usuarioDestino);
+                    usuarioDestino.recibirNotificacion("@" + usuarioOrigen.getNombre() + " ya no es tu amigo.", 1);
+                    usuarioOrigen.recibirNotificacion("Has eliminado tu amistad con @" + usuarioDestino.getNombre() + ".", 1);
+                    System.out.println("✅ Amistad eliminada con éxito.");
+                    break;
 
                 case 0:
                     System.out.println("\nSaliendo del sistema... ¡Hasta luego!");
