@@ -41,6 +41,7 @@ public class ProgramaPrincipal {
             System.out.println("7. Ver recomendaciones y red de un usuario");
             System.out.println("8. Gestion de postulaciones");
             System.out.println("9. Buscar usuarios por perfil");
+            System.out.println("------------------------------");
             System.out.println("10. Ver notificaciones");
             System.out.println("0. Salir");
 
@@ -226,14 +227,17 @@ public class ProgramaPrincipal {
                         System.out.println("Notificaciones: \n");
                         int contador = 1;
                         while (!usuarioActual.getNotificaciones().estaVacia()) {
-                            String notificacion = usuarioActual.getNotificaciones().desencolar();
-                            System.out.println(" [" + contador + "] " + notificacion);
+                            ElementoNotificacion notiElemento = usuarioActual.getNotificaciones().desencolar();
+                            String etiqueta = (notiElemento.getPrioridad() == 2) ? "[POSTULACION]" : "[AMISTADES]";
+
+                            System.out.println(" [" + contador + "] " + etiqueta + " " + notiElemento.getMensaje());
                             contador++;
                         }
 
-                        System.out.println("\n✅ Has leído todas tus notificaciones. Tu bandeja ahora está vacia.");
+                        System.out.println("\n✅ Has leído todas tus notificaciones");
                     }
-                    break;
+                break;
+
 
                 case 0:
                     System.out.println("\nSaliendo del sistema... ¡Hasta luego!");

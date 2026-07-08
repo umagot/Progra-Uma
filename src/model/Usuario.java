@@ -1,33 +1,34 @@
 package model;
-import TDA.Cola;
+
+import TDA.ColaPrioridad;
+
 public class Usuario implements Comparable<Usuario> {
 
     private int id;
     private String nombre;
     private String mail;
-    private Perfil perfil; // Un único perfil
-    private Cola<String> notificaciones;
-
+    private Perfil perfil;
+    private ColaPrioridad notificaciones;
 
     public Usuario(String nombre, int id, String mail, Perfil perfil) {
         this.nombre = nombre;
         this.id = id;
         this.mail = mail;
-        this.notificaciones = new Cola<String>(100);
+        this.notificaciones = new ColaPrioridad(100);
 
         if (perfil != null) {
-            this.perfil = new Perfil(perfil); // Constructor copia
+            this.perfil = new Perfil(perfil);
         } else {
             this.perfil = null;
         }
-
     }
 
-    // Constructor copia para guardar el historial en la pila
+    // Constructor copia
     public Usuario(Usuario otro) {
         this.nombre = otro.nombre;
         this.id = otro.id;
         this.mail = otro.mail;
+        this.notificaciones = new ColaPrioridad(100);
 
         if (otro.perfil != null) {
             this.perfil = new Perfil(otro.perfil);
@@ -36,13 +37,13 @@ public class Usuario implements Comparable<Usuario> {
         }
     }
 
-    // Constructor alternativo (sin perfil inicial)
+    // Constructor alternativo
     public Usuario(String nombre, int id, String mail) {
         this.nombre = nombre;
         this.id = id;
         this.mail = mail;
         this.perfil = null;
-        this.notificaciones = new Cola<String>(100);
+        this.notificaciones = new ColaPrioridad(100);
     }
 
     // Getters
@@ -58,7 +59,7 @@ public class Usuario implements Comparable<Usuario> {
         return mail;
     }
 
-    public Cola<String> getNotificaciones() {
+    public ColaPrioridad getNotificaciones() {
         return this.notificaciones;
     }
 
@@ -107,43 +108,13 @@ public class Usuario implements Comparable<Usuario> {
 
     @Override
     public String toString() {
-        String textoPerfil;
-
-        if (this.perfil == null) {
-            textoPerfil = "Sin perfil configurado";
-        } else {
-            textoPerfil = this.perfil.toString();
-        }
-
+        String textoPerfil = (this.perfil == null) ? "Sin perfil configurado" : this.perfil.toString();
         return "@" + nombre + " (ID: " + id + ") | Mail: " + mail + " | Perfil: " + textoPerfil;
     }
 
-
-    public void recibirNotificacion(String mensaje) {
+    public void recibirNotificacion(String mensaje, int prioridad) {
         if (this.notificaciones != null) {
-            if (!this.notificaciones.estaLlena()) {
-                this.notificaciones.encolar(mensaje);
-            } else {
-                this.notificaciones.desencolar();
-                this.notificaciones.encolar(mensaje);
-            }
+            this.notificaciones.encolar(new ElementoNotificacion(mensaje, prioridad));
         }
     }
-
-
-    public void leerNotificaciones() {
-        System.out.println("\n--- Bandeja de Entrada de @" + this.nombre + " ---");
-        if (this.notificaciones == null || this.notificaciones.estaVacia()) {
-            System.out.println("No tienes notificaciones nuevas.");
-            return;
-        }
-
-        int contador = 1;
-        while (!this.notificaciones.estaVacia()) {
-            String noti = this.notificaciones.desencolar();
-            System.out.println(contador + ". " + noti);
-            contador++;
-        }
-    }
-
 }
