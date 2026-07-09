@@ -45,9 +45,10 @@ public class ProgramaPrincipal {
             System.out.println("10. Ver notificaciones");
             System.out.println("11. Dejar de seguir o eliminar amistad");
             System.out.println("12. Mostrar matriz de conexiones");
+            System.out.println("13. Mostrar usuarios registrados");
             System.out.println("0. Salir");
 
-            opcion = SelectorPerfil.leerEnteroEnRango(scanner, "\nSeleccione una opcion: ", 0, 11);
+            opcion = SelectorPerfil.leerEnteroEnRango(scanner, "\nSeleccione una opcion: ", 0, 13);
 
             switch (opcion) {
                 case 1:
@@ -121,12 +122,22 @@ public class ProgramaPrincipal {
                     int id1 = SelectorPerfil.leerEntero(scanner, "Ingrese su ID de usuario: ");
                     int id2 = SelectorPerfil.leerEntero(scanner, "Ingrese el ID de la persona que desee seguir: ");
 
+                    if (id1 == id2) {
+                        System.out.println("⚠️ Error: No podés seguirte a vos mismo.");
+                        break;
+                    }
+
                     Usuario u1 = plataforma.buscar(id1);
                     Usuario u2 = plataforma.buscar(id2);
 
                     if (u1 != null && u2 != null) {
-                        redSocial.insertarArista(u1, u2);
-                        System.out.println("-> ¡" + u1.getNombre() + " ahora sigue a " + u2.getNombre() + "!");
+                        boolean yaLoSigue = redSocial.existeArista(u1, u2);
+                        if (yaLoSigue) {
+                            System.out.println("⚠️ Ya estás siguiendo a @" + u2.getNombre());
+                        } else {
+                            redSocial.insertarArista(u1, u2);
+                            System.out.println( u1.getNombre() + " ahora sigue a " + u2.getNombre() );
+                        }
                     } else {
                         System.out.println("-> Error: Uno o ambos IDs no existen en la plataforma.");
                     }
@@ -281,6 +292,10 @@ public class ProgramaPrincipal {
                 case 12:
                     System.out.println("\n--- VISUALIZACIÓN DE LA RED SOCIAL ---");
                     redSocial.mostrarMatriz();
+                    break;
+
+                case 13:
+                    redSocial.mostrarVertices();
                     break;
 
                 case 0:
