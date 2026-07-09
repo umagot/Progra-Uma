@@ -19,7 +19,7 @@ public class ProgramaPrincipal {
 
         DiccionarioUsuarios plataforma = new DiccionarioUsuarios(100);
         GestorPerfil gestorPerfil = new GestorPerfil(10, catalogoGeneral);
-        GrafoMatrizAdyacencia redSocial = new GrafoMatrizAdyacencia(100, false);
+        GrafoMatrizAdyacencia redSocial = new GrafoMatrizAdyacencia(100, true);
         GestorPostulaciones gestorPostulaciones = new GestorPostulaciones(50);
 
         precargarUsuarios(plataforma, redSocial, catalogoGeneral);
@@ -37,7 +37,7 @@ public class ProgramaPrincipal {
             System.out.println("3. Editar usuario existente");
             System.out.println("4. Deshacer ultimo cambio");
             System.out.println("5. Eliminar usuario de la plataforma");
-            System.out.println("6. Conectar dos usuarios (Agregar Amistad)");
+            System.out.println("6. Seguir a un usuario");
             System.out.println("7. Ver recomendaciones y red de un usuario");
             System.out.println("8. Gestion de postulaciones");
             System.out.println("9. Buscar usuarios por perfil");
@@ -115,16 +115,16 @@ public class ProgramaPrincipal {
                     break;
 
                 case 6:
-                    System.out.println("\n--- CONECTAR USUARIOS ---");
-                    int id1 = SelectorPerfil.leerEntero(scanner, "Ingrese el ID del primer usuario: ");
-                    int id2 = SelectorPerfil.leerEntero(scanner, "Ingrese el ID del segundo usuario: ");
+                    System.out.println("\n--- SEGUIR A UN USUARIO ---");
+                    int id1 = SelectorPerfil.leerEntero(scanner, "Ingrese su ID de usuario: ");
+                    int id2 = SelectorPerfil.leerEntero(scanner, "Ingrese el ID de la persona que desee seguir: ");
 
                     Usuario u1 = plataforma.buscar(id1);
                     Usuario u2 = plataforma.buscar(id2);
 
                     if (u1 != null && u2 != null) {
                         redSocial.insertarArista(u1, u2);
-                        System.out.println("-> ¡" + u1.getNombre() + " y " + u2.getNombre() + " ahora estan conectados!");
+                        System.out.println("-> ¡" + u1.getNombre() + " ahora sigue a " + u2.getNombre() + "!");
                     } else {
                         System.out.println("-> Error: Uno o ambos IDs no existen en la plataforma.");
                     }
@@ -213,7 +213,6 @@ public class ProgramaPrincipal {
 
                     if (usuarioActual == null) {
                         System.out.println("❌ Error: El usuario con ID " + idUsuario + " no existe en la plataforma.");
-                        System.out.println("=======================================");
                         break;
                     }
 

@@ -61,6 +61,8 @@ public class GrafoMatrizAdyacencia implements IGrafo {
         if (!dirigido) {
             matriz[posDestino][posOrigen] = 1;
             vertices[posOrigen].recibirNotificacion("Ahora eres amigo de @" + vertices[posDestino].getNombre() + ".",1);
+        } else {
+            vertices[posDestino].recibirNotificacion("@" + vertices[posOrigen].getNombre() + " ha comenzado a seguirte.", 1);
         }
 
 
@@ -243,7 +245,7 @@ public class GrafoMatrizAdyacencia implements IGrafo {
     }
 
     private String getNivelDesc(int nivel) {
-        if (nivel == 1) return "Amigo directo";
+        if (nivel == 1) return "Usuario que sigues";
         if (nivel == 2) return "Amigo de amigo";
         return "Conexión lejana";
     }
