@@ -43,9 +43,11 @@ public class ProgramaPrincipal {
             System.out.println("9. Buscar usuarios por perfil");
             System.out.println("------------------------------");
             System.out.println("10. Ver notificaciones");
+            System.out.println("11. Dejar de seguir o eliminar amistad");
+            System.out.println("12. Mostrar matriz de conexiones");
             System.out.println("0. Salir");
 
-            opcion = SelectorPerfil.leerEnteroEnRango(scanner, "\nSeleccione una opcion: ", 0, 10);
+            opcion = SelectorPerfil.leerEnteroEnRango(scanner, "\nSeleccione una opcion: ", 0, 11);
 
             switch (opcion) {
                 case 1:
@@ -235,26 +237,50 @@ public class ProgramaPrincipal {
                 break;
 
                 case 11:
-                    System.out.println("---ELIMINAR AMISTAD---");
+                    System.out.println("--- DEJAR DE SEGUIR / ELIMINAR AMISTAD---");
                     int idOrigen = SelectorPerfil.leerEntero(scanner, "Ingrese su ID de usuario: ");
                     Usuario usuarioOrigen = plataforma.buscar(idOrigen);
-                    int idDestino = SelectorPerfil.leerEntero(scanner, "Ingrese el ID del amigo a eliminar: ");
+                    int idDestino = SelectorPerfil.leerEntero(scanner, "Ingrese el ID del otro usuario: ");
                     Usuario usuarioDestino = plataforma.buscar(idDestino);
-
                     if (usuarioOrigen == null || usuarioDestino == null) {
                         System.out.println("❌ Error: Uno o ambos usuarios no existen.");
                         break;
                     }
-
-                    if (!redSocial.existeArista(usuarioOrigen, usuarioDestino)) {
-                        System.out.println("⚠️ Estos usuarios no son amigos");
+                    boolean origenSigueADestino = redSocial.existeArista(usuarioOrigen, usuarioDestino);
+                    boolean destinoSigueAOrigen = redSocial.existeArista(usuarioDestino, usuarioOrigen);
+                    if (!origenSigueADestino) {
+                        System.out.println("⚠️ Actualmente no sigues a @" + usuarioDestino.getNombre() + ".");
                         break;
                     }
 
-                    redSocial.eliminarArista(usuarioOrigen, usuarioDestino);
-                    usuarioDestino.recibirNotificacion("@" + usuarioOrigen.getNombre() + " ya no es tu amigo.", 1);
-                    usuarioOrigen.recibirNotificacion("Has eliminado tu amistad con @" + usuarioDestino.getNombre() + ".", 1);
-                    System.out.println("✅ Amistad eliminada con éxito.");
+                    if (destinoSigueAOrigen) {
+                        System.out.println("\n¡Son amigos! Ambos se siguen.");
+                        System.out.println("1. Dejar de seguir");
+                        System.out.println("2. Eliminar amistad");
+                        int eleccion = SelectorPerfil.leerEnteroEnRango(scanner, "Seleccione una opción: ", 1, 2);
+                        if (eleccion == 1) {
+                            redSocial.eliminarArista(usuarioOrigen, usuarioDestino);
+                            usuarioOrigen.recibirNotificacion("Has dejado de seguir a @" + usuarioDestino.getNombre(), 1);
+                            System.out.println("✅ Has dejado de seguir a @" + usuarioDestino.getNombre() + " con éxito.");
+                        } else {
+                            redSocial.eliminarArista(usuarioOrigen, usuarioDestino);
+                            redSocial.eliminarArista(usuarioDestino, usuarioOrigen);
+                            usuarioDestino.recibirNotificacion("@" + usuarioOrigen.getNombre() + " ya no es tu amigo.", 1);
+                            usuarioOrigen.recibirNotificacion("Has eliminado tu amistad con @" + usuarioDestino.getNombre() , 1);
+                            System.out.println("✅ Amistad eliminada con éxito.");
+                        }
+                    }
+
+                    else {
+                        redSocial.eliminarArista(usuarioOrigen, usuarioDestino);
+                        usuarioOrigen.recibirNotificacion("Has dejado de seguir a @" + usuarioDestino.getNombre() , 1);
+                        System.out.println("✅ Has dejado de seguir a @" + usuarioDestino.getNombre());
+                    }
+                    break;
+
+                case 12:
+                    System.out.println("\n--- VISUALIZACIÓN DE LA RED SOCIAL ---");
+                    redSocial.mostrarMatriz();
                     break;
 
                 case 0:
